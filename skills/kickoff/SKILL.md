@@ -18,7 +18,9 @@ Skip when: the folder is a git repo, `git branch --show-current` prints
 `main`, and `git status --porcelain` prints nothing.
 
 - Not a repo: `git init -b main`.
-- On another branch: ask the user whether to switch to `main`.
+- On another branch: werf only works from `main`. If `main` exists, ask to
+  switch to it. If not (e.g. the default branch is `master`), ask to rename it:
+  `git branch -m <current> main`.
 - Uncommitted changes: list them and ask whether to commit them now. Do not go
   on with a dirty tree; every werf job branches from `main`'s last commit.
 
@@ -62,6 +64,8 @@ Skip each item that is already in place.
   `/werf:run next` builds the first unchecked item and checks it off with its job id.
   ```
 - `werf/dashboard.html`: copy `${CLAUDE_SKILL_DIR}/dashboard.html`.
+- `werf/jobs/` exists (`mkdir -p werf/jobs`), so the dashboard has a folder to
+  read before the first job.
 - `.gitignore` contains the line `/werf/jobs/`.
 - `.claude/settings.json` contains the block below, so anyone who clones and
   trusts the repo gets the werf. Merge it into existing JSON; keep every key
@@ -126,5 +130,5 @@ Then tell the user:
 
 - Next: `/werf:run next` builds the first backlog item. Open one session per
   job to run several in parallel.
-- Dashboard: `cd werf && python -m http.server 8000`, then open
-  http://localhost:8000/dashboard.html.
+- Dashboard: `cd werf && python3 -m http.server 8000` (`python` on Windows),
+  then open http://localhost:8000/dashboard.html.

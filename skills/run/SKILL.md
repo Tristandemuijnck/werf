@@ -30,8 +30,6 @@ feature → spec-writer → builder → [security, ux, ui, code] → WAIT FOR AL
 |              | `werf:reviewer-code`     | `round-N/review-code.md`                   |
 | approve      | `werf:approver`          | `decision.md`                              |
 
-Spawn agents by these full names; the rest of this file uses the short names.
-
 `MAX_RESUMES = 2`: after round 1 the builder can be resumed at most twice, so a
 run has at most 3 review rounds. To change the werf, edit this file and
 `agents/` in the plugin repo, https://github.com/Tristandemuijnck/werf.
@@ -117,10 +115,10 @@ gets `5102 + 10n`, appended as ` Port: <port>.`
    Then, in the worktree, run the setup AGENTS.md gives for a fresh checkout
    (installing dependencies, for example). If any of it fails, stop and tell
    the user.
-3. **Spec.** Spawn `spec-writer` with the prompt
+3. **Spec.** Spawn `werf:spec-writer` with the prompt
    `<paths> Feature: <feature, verbatim>`.
    Wait for it to finish, then check that `spec.md` exists.
-4. **Build.** Set `stage: "build"`. Spawn `builder` **with the name
+4. **Build.** Set `stage: "build"`. Spawn `werf:builder` **with the name
    `builder-<job-id>`** and the prompt `<paths> Build round 1. Port: <port>.`
    Wait for it to finish, then go to **Build check**.
 
@@ -135,7 +133,8 @@ Read the first line of `build.md`.
 
 1. Set `stage: "review"`, `round: N` and all four reviews to `pending`. Create
    `werf/jobs/<job-id>/round-<N>/`.
-2. Spawn all four reviewers **in one message**, so they run in parallel. Each
+2. Spawn all four reviewers (`werf:reviewer-security`, `werf:reviewer-ux`,
+   `werf:reviewer-ui`, `werf:reviewer-code`) **in one message**, so they run in parallel. Each
    gets the prompt `<paths> Review round N.`, plus its port for `reviewer-ux`
    and `reviewer-ui`.
 3. **WAIT FOR ALL.** Each time a reviewer finishes, read the first line of its
@@ -157,7 +156,7 @@ Read the first line of `build.md`.
 
 ### Approve
 
-Set `stage: "approve"`. Spawn `approver` with the prompt `<paths> Final round: N.`
+Set `stage: "approve"`. Spawn `werf:approver` with the prompt `<paths> Final round: N.`
 When it finishes, read the first line of `decision.md`:
 
 - `APPROVE`: go to **Merge**.
@@ -211,7 +210,7 @@ The job must be in `needs-human`.
 1. Write the note, verbatim, to `werf/jobs/<job-id>/rework-<k>.md`, where `k`
    is the next unused number.
 2. Set `stage: "build"`.
-3. Spawn a fresh `builder` named `builder-<job-id>` with the prompt
+3. Spawn a fresh `werf:builder` named `builder-<job-id>` with the prompt
    `<paths> Rework: read rework-<k>.md and address it, then update build.md for round N+1. Port: <port>.`
    (`N` is the job's last round.) A rework run gets a fresh `MAX_RESUMES`.
 4. Continue from **Build check**, exactly like a new job.

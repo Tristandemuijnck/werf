@@ -22,7 +22,11 @@ run several at once, one Claude Code session each.
 /plugin install werf@werf
 ```
 
-Needs git, and for the builder and UX/UI reviewers, the
+No SSH key for GitHub? Installs from inside a session use SSH. Set
+`CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1`, or install from your shell with
+`claude plugin marketplace add Tristandemuijnck/werf && claude plugin install werf@werf`.
+
+Needs git, Python 3 (for the dashboard) and, for the builder and UX/UI reviewers, the
 [agent-browser](https://github.com/vercel-labs/agent-browser) CLI (`/werf:kickoff`
 installs it if it's missing).
 
@@ -53,7 +57,7 @@ Jobs that pass every review merge into `main` locally. The werf never pushes.
 ## Dashboard
 
 ```
-cd werf && python -m http.server 8000
+cd werf && python3 -m http.server 8000   # python on Windows
 ```
 
 Open http://localhost:8000/dashboard.html to watch jobs move through the loop.
