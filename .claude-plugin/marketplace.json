@@ -1,0 +1,8 @@
+{
+  "name": "werf",
+  "owner": { "name": "Tristan de Muijnck" },
+  "description": "The werf plugin: a software shipyard for Claude Code.",
+  "plugins": [
+    { "name": "werf", "source": "./", "description": "Software werf: spec, build, review, approve" }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "name": "werf",
+  "description": "Software werf (Dutch: shipyard): spec → build → security/ux/ui/code review → approve, one git worktree per job. Start any project with /werf:kickoff.",
+  "author": { "name": "Tristan de Muijnck" },
+  "repository": "https://github.com/Tristandemuijnck/werf",
+  "license": "MIT"
+}
